@@ -16,7 +16,6 @@ import { ArrowLeft, Building, User } from "lucide-react"
 export default function RegisterPage() {
   const router = useRouter()
   const [formData, setFormData] = useState({
-    // Blood Bank Details
     bankName: "",
     address: "",
     state: "",
@@ -30,7 +29,6 @@ export default function RegisterPage() {
     bankName_: "",
     ifsc: "",
     upiId: "",
-    // Administrator Details
     adminName: "",
     designation: "",
     adminMobile: "",
@@ -41,15 +39,13 @@ export default function RegisterPage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
     console.log("Form submitted:", formData)
-    // Redirect to login or dashboard
     router.push("/login")
   }
 
@@ -79,15 +75,12 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      
-      <main className="flex-1 py-8">
-        <div className="container max-w-4xl">
-          <div className="mb-8">
-            <Button
-              variant="ghost"
-              className="mb-4"
-              asChild
-            >
+
+      <main className="flex-1 py-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Page Header */}
+          <div className="mb-10">
+            <Button variant="ghost" className="mb-4" asChild>
               <Link href="/">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Home
@@ -99,7 +92,8 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-10">
             {/* Blood Bank Details */}
             <Card>
               <CardHeader>
@@ -111,156 +105,79 @@ export default function RegisterPage() {
                   Provide your blood bank's basic information and credentials.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="bankName">Name of Blood Bank *</Label>
-                    <Input
-                      id="bankName"
-                      name="bankName"
-                      value={formData.bankName}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="bankName" name="bankName" value={formData.bankName} onChange={handleInputChange} required />
                   </div>
                   <div>
                     <Label htmlFor="contactPerson">Contact Person Name *</Label>
-                    <Input
-                      id="contactPerson"
-                      name="contactPerson"
-                      value={formData.contactPerson}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="contactPerson" name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required />
                   </div>
                 </div>
 
                 <div>
                   <Label htmlFor="address">Address *</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <Input id="address" name="address" value={formData.address} onChange={handleInputChange} required />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="state">State/UT *</Label>
-                    <Input
-                      id="state"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="state" name="state" value={formData.state} onChange={handleInputChange} required />
                   </div>
                   <div>
                     <Label htmlFor="pincode">Pincode *</Label>
-                    <Input
-                      id="pincode"
-                      name="pincode"
-                      value={formData.pincode}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="pincode" name="pincode" value={formData.pincode} onChange={handleInputChange} required />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="contactMobile">Contact Mobile No *</Label>
-                    <Input
-                      id="contactMobile"
-                      name="contactMobile"
-                      type="tel"
-                      value={formData.contactMobile}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="contactMobile" name="contactMobile" type="tel" value={formData.contactMobile} onChange={handleInputChange} required />
                   </div>
                   <div>
                     <Label htmlFor="email">Email ID *</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="registrationNo">Registration No *</Label>
-                    <Input
-                      id="registrationNo"
-                      name="registrationNo"
-                      value={formData.registrationNo}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="registrationNo" name="registrationNo" value={formData.registrationNo} onChange={handleInputChange} required />
                   </div>
                   <div>
                     <Label htmlFor="validUpto">Valid Upto *</Label>
-                    <Input
-                      id="validUpto"
-                      name="validUpto"
-                      type="date"
-                      value={formData.validUpto}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="validUpto" name="validUpto" type="date" value={formData.validUpto} onChange={handleInputChange} required />
                   </div>
                 </div>
 
                 <div>
                   <Label htmlFor="gstNo">GST No</Label>
-                  <Input
-                    id="gstNo"
-                    name="gstNo"
-                    value={formData.gstNo}
-                    onChange={handleInputChange}
-                  />
+                  <Input id="gstNo" name="gstNo" value={formData.gstNo} onChange={handleInputChange} />
                 </div>
 
                 <Separator />
 
                 <h3 className="text-lg font-semibold">Bank Account Details</h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="bankName_">Name of Bank</Label>
-                    <Input
-                      id="bankName_"
-                      name="bankName_"
-                      value={formData.bankName_}
-                      onChange={handleInputChange}
-                    />
+                    <Input id="bankName_" name="bankName_" value={formData.bankName_} onChange={handleInputChange} />
                   </div>
                   <div>
                     <Label htmlFor="ifsc">IFSC Code</Label>
-                    <Input
-                      id="ifsc"
-                      name="ifsc"
-                      value={formData.ifsc}
-                      onChange={handleInputChange}
-                    />
+                    <Input id="ifsc" name="ifsc" value={formData.ifsc} onChange={handleInputChange} />
                   </div>
                 </div>
 
                 <div>
                   <Label htmlFor="upiId">UPI ID</Label>
-                  <Input
-                    id="upiId"
-                    name="upiId"
-                    value={formData.upiId}
-                    onChange={handleInputChange}
-                  />
+                  <Input id="upiId" name="upiId" value={formData.upiId} onChange={handleInputChange} />
                 </div>
               </CardContent>
             </Card>
@@ -276,56 +193,30 @@ export default function RegisterPage() {
                   Information about the primary administrator for this blood bank.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="adminName">Administrator Name *</Label>
-                    <Input
-                      id="adminName"
-                      name="adminName"
-                      value={formData.adminName}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="adminName" name="adminName" value={formData.adminName} onChange={handleInputChange} required />
                   </div>
                   <div>
                     <Label htmlFor="designation">Designation *</Label>
-                    <Input
-                      id="designation"
-                      name="designation"
-                      value={formData.designation}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="designation" name="designation" value={formData.designation} onChange={handleInputChange} required />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="adminMobile">Contact Mobile No *</Label>
-                    <Input
-                      id="adminMobile"
-                      name="adminMobile"
-                      type="tel"
-                      value={formData.adminMobile}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="adminMobile" name="adminMobile" type="tel" value={formData.adminMobile} onChange={handleInputChange} required />
                   </div>
                   <div>
                     <Label htmlFor="adminEmail">Email ID *</Label>
-                    <Input
-                      id="adminEmail"
-                      name="adminEmail"
-                      type="email"
-                      value={formData.adminEmail}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <Input id="adminEmail" name="adminEmail" type="email" value={formData.adminEmail} onChange={handleInputChange} required />
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-start space-x-2">
                   <Checkbox
                     id="authenticated"
                     checked={formData.authenticated}
@@ -333,7 +224,7 @@ export default function RegisterPage() {
                       setFormData(prev => ({ ...prev, authenticated: checked as boolean }))
                     }
                   />
-                  <Label htmlFor="authenticated">
+                  <Label htmlFor="authenticated" className="text-sm leading-tight">
                     I authenticate that all the provided information is correct and valid.
                   </Label>
                 </div>
@@ -341,27 +232,18 @@ export default function RegisterPage() {
             </Card>
 
             {/* Form Actions */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/")}
-              >
-                Back to Home
+            <div className="flex flex-col sm:flex-row justify-end gap-4">
+              <Button type="button" variant="outline" onClick={clearForm}>
+                Clear Form
               </Button>
-              <div className="flex gap-4">
-                <Button type="button" variant="outline" onClick={clearForm}>
-                  Clear Form
-                </Button>
-                <Button type="submit">
-                  Register Blood Bank
-                </Button>
-              </div>
+              <Button type="submit">
+                Register Blood Bank
+              </Button>
             </div>
           </form>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   )

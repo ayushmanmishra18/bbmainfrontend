@@ -1,21 +1,30 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DivideIcon as LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
+
+type LucideIcon = React.ComponentType<{
+  className?: string
+  size?: number | string
+}>
 
 interface StatsCardProps {
   title: string
   value: string
   description: string
-  icon: LucideIcon
+  icon: string 
   trend?: {
     value: number
     label: string
   }
 }
 
-export function StatsCard({ title, value, description, icon: Icon, trend }: StatsCardProps) {
+export function StatsCard({ title, value, description, icon: iconName, trend }: StatsCardProps) {
+  const Icon = ({ className }: { className?: string }) => {
+    const IconComponent = require(`lucide-react`)[iconName] as LucideIcon
+    return <IconComponent className={className} />
+  }
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

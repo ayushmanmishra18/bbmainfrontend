@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
-import { Heart } from "lucide-react"
+
 
 export default function LoginPage() {
   const router = useRouter()
@@ -41,8 +41,8 @@ export default function LoginPage() {
         <div className="container max-w-md">
           <Card>
             <CardHeader className="text-center">
-              <div className="mx-auto w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center mb-4">
-                <Heart className="w-6 h-6 text-red-600" />
+              <div className="mx-auto  h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center mb-4">
+                
               </div>
               <CardTitle className="text-2xl">Login to BloodBankGroup</CardTitle>
               <CardDescription>

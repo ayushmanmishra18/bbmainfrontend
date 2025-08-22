@@ -1,55 +1,36 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { Heart, Menu, X } from "lucide-react"
-import { useState } from "react"
-import { cn } from "@/lib/utils"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Menu, X, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
-]
+];
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
-
-  const isDashboard = pathname.startsWith("/dashboard")
-
-  if (isDashboard) {
-    return (
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Heart className="h-6 w-6 text-red-600" />
-            <span className="font-bold text-lg">BloodBankGroup</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <ThemeToggle />
-            <Button variant="ghost" size="sm">
-              Profile
-            </Button>
-          </div>
-        </div>
-      </header>
-    )
-  }
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <nav className="container flex items-center justify-between py-4">
-        {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
-          <Heart className="h-8 w-8 text-red-600" />
-          <span className="font-bold text-xl">BloodBankGroup</span>
-        </Link>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="mx-auto max-w-7xl flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+        
+        {/* Left: Logo */}
+        <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="font-bold text-lg">BloodBankGroup</span>
+          </Link>
+        </div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
+        {/* Middle: Navigation */}
+        <nav className="hidden md:flex items-center gap-6 flex-1 justify-center">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -64,62 +45,79 @@ export function Header() {
               {item.name}
             </Link>
           ))}
-        </div>
+        </nav>
 
-        {/* Right side - Theme toggle and auth buttons */}
-        <div className="hidden md:flex items-center space-x-4">
-          <ThemeToggle />
-          <Button variant="ghost" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/register">Register</Link>
-          </Button>
-        </div>
+        {/* Right: Actions */}
+        <div className="flex items-center gap-3">
+          {/* Login/Register Buttons (Desktop only) */}
+          <div className="hidden md:flex items-center gap-3">
+            <Button
+              asChild
+              className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+            >
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button
+              asChild
+              className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+            >
+              <Link href="/register">Register</Link>
+            </Button>
+          </div>
 
-        {/* Mobile menu button */}
-        <div className="md:hidden flex items-center space-x-2">
+          {/* Theme Toggle */}
           <ThemeToggle />
+
+          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
+            className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
-      </nav>
+      </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t">
-          <div className="container py-4 space-y-4">
+        <div className="md:hidden bg-background border-t">
+          <nav className="flex flex-col space-y-2 p-4">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
                 className={cn(
-                  "block py-2 text-sm font-medium",
+                  "text-sm font-medium transition-colors hover:text-primary",
                   pathname === item.href
                     ? "text-primary"
                     : "text-muted-foreground"
                 )}
-                onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-            <div className="border-t pt-4 space-y-2">
-              <Button variant="ghost" className="w-full justify-start" asChild>
+
+            {/* Mobile Login/Register */}
+            <div className="flex flex-col gap-2 mt-4">
+              <Button
+                asChild
+                className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+              >
                 <Link href="/login">Login</Link>
               </Button>
-              <Button className="w-full" asChild>
+              <Button
+                asChild
+                className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+              >
                 <Link href="/register">Register</Link>
               </Button>
             </div>
-          </div>
+          </nav>
         </div>
       )}
     </header>
-  )
+  );
 }

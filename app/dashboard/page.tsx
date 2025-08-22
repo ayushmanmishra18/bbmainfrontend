@@ -1,7 +1,6 @@
 import { StatsCard } from "@/components/ui/stats-card"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Building, Users, UserPlus, MessageSquare } from "lucide-react"
 
 const recentActivities = [
   {
@@ -51,48 +50,44 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's what's happening with your blood bank network.</p>
+        <p className="text-muted-foreground">Welcome back! Here's what's happening with your blood bank.</p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Total Blood Banks"
-          value="127"
-          description="+12 from last month"
-          icon={Building}
-          trend={{ value: 8.2, label: "from last month" }}
+          value="24"
+          description="+12% from last month"
+          icon="Building"
+          trend={{ value: 12, label: 'Increase' }}
         />
         <StatsCard
           title="Active Donors"
-          value="3,247"
-          description="+201 from last month"
-          icon={Users}
-          trend={{ value: 15.3, label: "from last month" }}
+          value="1,234"
+          description="+8% from last month"
+          icon="Users"
+          trend={{ value: 8, label: 'Increase' }}
         />
         <StatsCard
-          title="Active Patients"
-          value="892"
-          description="+89 from last month"
-          icon={UserPlus}
-          trend={{ value: 11.7, label: "from last month" }}
+          title="Blood Units Available"
+          value="1,234"
+          description="+5% from last month"
+          icon="Droplets"
+          trend={{ value: 5, label: 'Increase' }}
         />
         <StatsCard
-          title="Pending Requests"
+          title="Active Requests"
           value="24"
-          description="Need attention"
-          icon={MessageSquare}
-          trend={{ value: -5.2, label: "from yesterday" }}
+          description="+2 today"
+          icon="Activity"
+          trend={{ value: 2, label: 'New today' }}
         />
       </div>
 
-      {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>
-            Latest registrations and requests in your network
-          </CardDescription>
+          <CardTitle>Recent Activities</CardTitle>
+          <CardDescription>Latest updates from your blood bank network</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -108,17 +103,11 @@ export default function DashboardPage() {
             <TableBody>
               {recentActivities.map((activity) => (
                 <TableRow key={activity.id}>
-                  <TableCell className="font-medium">{activity.type}</TableCell>
+                  <TableCell>{activity.type}</TableCell>
                   <TableCell>{activity.name}</TableCell>
-                  <TableCell>
-                    {activity.bloodGroup !== "-" && (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300">
-                        {activity.bloodGroup}
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{activity.date}</TableCell>
-                  <TableCell className="text-muted-foreground">{activity.time}</TableCell>
+                  <TableCell>{activity.bloodGroup}</TableCell>
+                  <TableCell>{activity.date}</TableCell>
+                  <TableCell>{activity.time}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

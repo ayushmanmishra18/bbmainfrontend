@@ -1,3 +1,5 @@
+'use client'
+
 import { Header } from "@/components/layout/header"
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar"
 
@@ -6,6 +8,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Authentication is bypassed for testing
+  // In production, implement proper authentication here
+  
   return (
     <div className="min-h-screen">
       <Header />
