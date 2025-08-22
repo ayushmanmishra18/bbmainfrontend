@@ -3,13 +3,31 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+// Assuming you are using shadcn/ui components. If not, these will need to be created.
+// To install them: npx shadcn-ui@latest add button input label card
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Header } from "@/components/layout/header"
-import { Footer } from "@/components/layout/footer"
+// Icons from lucide-react: npm install lucide-react
 import { ArrowLeft, Building, User, CheckCircle2 } from "lucide-react"
+
+// NOTE: This component assumes you have a Header and Footer component.
+// You can create placeholder components if they don't exist yet.
+// e.g., in src/components/layout/Header.tsx -> export const Header = () => <header className="h-16 border-b"></header>;
+// e.g., in src/components/layout/Footer.tsx -> export const Footer = () => <footer className="h-16 border-t"></footer>;
+
+
+const Footer = () => {
+    return (
+        <footer className="bg-background border-t">
+            <div className="container p-4 text-center text-sm text-foreground">
+                © {new Date().getFullYear()} BloodBankGroup.com. All Rights Reserved.
+            </div>
+        </footer>
+    )
+}
+
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -20,7 +38,7 @@ export default function RegisterPage() {
     state: "",
     pincode: "",
     contactMobile: "",
-    email: "",
+    email: "", // Blood bank's general email
     contactPerson: "",
     registrationNo: "",
     validUpto: "",
@@ -31,7 +49,7 @@ export default function RegisterPage() {
     adminName: "",
     designation: "",
     adminMobile: "",
-    adminEmail: "",
+    adminEmail: "", // Admin's email for verification
   })
 
   const [otpSent, setOtpSent] = useState(false)
@@ -46,18 +64,18 @@ export default function RegisterPage() {
   }
 
   const handleSendOtp = () => {
-    if (!formData.email) {
-      alert("Please enter an email first.")
+    if (!formData.adminEmail) {
+      alert("Please enter the Admin Email first.")
       return
     }
     // 🔗 TODO: call backend API here
-    console.log("Sending OTP to:", formData.email)
+    console.log("Sending OTP to Admin Email:", formData.adminEmail)
     setOtpSent(true)
   }
 
   const handleVerifyOtp = () => {
-    // 🔗 TODO: call backend API here
-    if (otp === "123456") {
+    // 🔗 TODO: call backend API here to verify the OTP
+    if (otp === "123456") { // Using a placeholder OTP for now
       setOtpVerified(true)
     } else {
       alert("Invalid OTP. Please try again.")
@@ -67,10 +85,11 @@ export default function RegisterPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!otpVerified) {
-      alert("Please verify your email before registering.")
+      alert("Please verify the admin email before registering.")
       return
     }
     console.log("Form submitted:", formData)
+    // Redirect to login or a success page after submission
     router.push("/login")
   }
 
@@ -100,11 +119,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    
 
       <main className="flex-1 py-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Header */}
           <div className="mb-10">
             <Button variant="ghost" className="mb-4" asChild>
@@ -114,7 +133,7 @@ export default function RegisterPage() {
               </Link>
             </Button>
             <h1 className="text-3xl font-bold mb-2">Blood Bank Registration</h1>
-            <p className="text-muted-foreground">
+            <p className="text-foreground/60">
               Register your blood bank to join our network and start making a difference.
             </p>
           </div>
@@ -152,53 +171,26 @@ export default function RegisterPage() {
                     <Label htmlFor="contactMobile">Contact Mobile *</Label>
                     <Input id="contactMobile" name="contactMobile" value={formData.contactMobile} onChange={handleInputChange} required />
                   </div>
-
-                  {/* Email + OTP */}
-                  <div className="col-span-2">
-                    <Label htmlFor="email">Email ID *</Label>
-                    <div className="flex gap-2">
-                      <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
-                      <Button type="button" onClick={handleSendOtp}>
-                        {otpSent ? "Resend OTP" : "Send OTP"}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                {otpSent && !otpVerified && (
                   <div>
-                    <Label htmlFor="otp">Enter OTP</Label>
-                    <div className="flex gap-2 mt-1">
-                      <Input id="otp" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="Enter OTP" />
-                      <Button type="button" onClick={handleVerifyOtp}>
-                        Verify
-                      </Button>
-                    </div>
+                    <Label htmlFor="email">General Email ID *</Label>
+                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
                   </div>
-                )}
-
-                {otpVerified && (
-                  <div className="flex items-center text-green-600 gap-2 text-sm font-medium">
-                    <CheckCircle2 className="h-5 w-5" />
-                    You have been authenticated
+                  <div>
+                    <Label htmlFor="contactPerson">Contact Person *</Label>
+                    <Input id="contactPerson" name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required />
                   </div>
-                )}
-
-                <div>
-                  <Label htmlFor="contactPerson">Contact Person *</Label>
-                  <Input id="contactPerson" name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required />
-                </div>
-                <div>
-                  <Label htmlFor="registrationNo">Registration No *</Label>
-                  <Input id="registrationNo" name="registrationNo" value={formData.registrationNo} onChange={handleInputChange} required />
-                </div>
-                <div>
-                  <Label htmlFor="validUpto">Valid Upto *</Label>
-                  <Input id="validUpto" name="validUpto" type="date" value={formData.validUpto} onChange={handleInputChange} required />
-                </div>
-                <div>
-                  <Label htmlFor="gstNo">GST No</Label>
-                  <Input id="gstNo" name="gstNo" value={formData.gstNo} onChange={handleInputChange} />
+                  <div>
+                    <Label htmlFor="registrationNo">Registration No *</Label>
+                    <Input id="registrationNo" name="registrationNo" value={formData.registrationNo} onChange={handleInputChange} required />
+                  </div>
+                  <div>
+                    <Label htmlFor="validUpto">Valid Upto *</Label>
+                    <Input id="validUpto" name="validUpto" type="date" value={formData.validUpto} onChange={handleInputChange} required />
+                  </div>
+                  <div>
+                    <Label htmlFor="gstNo">GST No</Label>
+                    <Input id="gstNo" name="gstNo" value={formData.gstNo} onChange={handleInputChange} />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -207,6 +199,7 @@ export default function RegisterPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Bank Account Details</CardTitle>
+                <CardDescription>Optional: For receiving donations or payments.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -233,6 +226,7 @@ export default function RegisterPage() {
                   <User className="h-5 w-5" />
                   <CardTitle>Admin Details</CardTitle>
                 </div>
+                <CardDescription>The primary contact for this account. Email must be verified.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -248,10 +242,34 @@ export default function RegisterPage() {
                     <Label htmlFor="adminMobile">Admin Mobile *</Label>
                     <Input id="adminMobile" name="adminMobile" value={formData.adminMobile} onChange={handleInputChange} required />
                   </div>
-                  <div>
-                    <Label htmlFor="adminEmail">Admin Email</Label>
-                    <Input id="adminEmail" name="adminEmail" type="email" value={formData.adminEmail} onChange={handleInputChange} />
+                  <div className="md:col-span-2">
+                    <Label htmlFor="adminEmail">Admin Email * (for verification)</Label>
+                    <div className="flex gap-2">
+                      <Input id="adminEmail" name="adminEmail" type="email" value={formData.adminEmail} onChange={handleInputChange} required disabled={otpSent} />
+                      <Button type="button" onClick={handleSendOtp} disabled={otpVerified}>
+                        {otpVerified ? "Verified" : otpSent ? "Resend OTP" : "Send OTP"}
+                      </Button>
+                    </div>
                   </div>
+
+                  {otpSent && !otpVerified && (
+                    <div className="md:col-span-2">
+                      <Label htmlFor="otp">Enter OTP</Label>
+                      <div className="flex gap-2 mt-1">
+                        <Input id="otp" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="Enter 6-digit OTP" />
+                        <Button type="button" onClick={handleVerifyOtp}>
+                          Verify
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {otpVerified && (
+                    <div className="md:col-span-2 flex items-center text-green-600 gap-2 text-sm font-medium">
+                      <CheckCircle2 className="h-5 w-5" />
+                      Admin Email has been successfully verified.
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
