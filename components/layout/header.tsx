@@ -49,21 +49,23 @@ export function Header() {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-3">
-          {/* Login/Register Buttons (Desktop only) */}
-          <div className="hidden md:flex items-center gap-3">
-            <Button
-              asChild
-              className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
-            >
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button
-              asChild
-              className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
-            >
-              <Link href="/register">Register</Link>
-            </Button>
-          </div>
+          {/* Login/Register Buttons (Desktop only) - Show only on home page */}
+          {pathname === '/' && (
+            <div className="hidden md:flex items-center gap-3">
+              <Button
+                asChild
+                className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+              >
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button
+                asChild
+                className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+              >
+                <Link href="/register">Register</Link>
+              </Button>
+            </div>
+          )}
 
           {/* Theme Toggle */}
           <ThemeToggle />
@@ -100,21 +102,23 @@ export function Header() {
               </Link>
             ))}
 
-            {/* Mobile Login/Register */}
-            <div className="flex flex-col gap-2 mt-4">
-              <Button
-                asChild
-                className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
-              >
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button
-                asChild
-                className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
-              >
-                <Link href="/register">Register</Link>
-              </Button>
-            </div>
+            {/* Mobile Login/Register - Show only on home page */}
+            {pathname === '/' && (
+              <div className="flex flex-col gap-2 mt-4">
+                <Button
+                  asChild
+                  className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+                >
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button
+                  asChild
+                  className="bg-white text-gray-900 shadow hover:bg-gray-100 dark:bg-gray-100 dark:hover:bg-gray-200"
+                >
+                  <Link href="/register">Register</Link>
+                </Button>
+              </div>
+            )}
           </nav>
         </div>
       )}
