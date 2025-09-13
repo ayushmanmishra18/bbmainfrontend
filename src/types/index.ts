@@ -24,3 +24,15 @@ export interface AdminDetails {
   mobile: string;
   email: string;
 }
+// Add this new interface to your src/types/index.ts file
+
+export interface DashboardData {
+  stats: {
+    totalUnits: string;
+    totalDonors: string;
+    pendingRequests: string;
+    partnerBanks: string;
+  };
+  inventoryByGroup: { name: string; units: number }[];
+  recentActivity: { id: number; type: string; description: string; time: string }[];
+}
