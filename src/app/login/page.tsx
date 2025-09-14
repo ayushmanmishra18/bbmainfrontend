@@ -1,105 +1,108 @@
+// src/app/login/page.tsx
 "use client";
-
-import React, { useState, FormEvent } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Import the router
-import { loginAdmin } from '@/lib/api'; // Import our API function
+import React, { useState, FormEvent } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { loginAdmin } from "../../lib/api";
+import FormInput from "../../components/ui/FormInput";
+import PublicHeader from "../../components/layout/PublicHeader";
+import PublicFooter from "../../components/layout/PublicFooter";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('admin@bloodbank.com'); // Pre-filled for easy testing
-  const [password, setPassword] = useState('password123'); // Pre-filled for easy testing
+  const [email, setEmail] = useState("admin@bloodbank.com");
+  const [password, setPassword] = useState("password123");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter(); // Initialize the router
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
-      // Call the API function from our lib/api.ts file
       const response = await loginAdmin(email, password);
-      
       if (response.success) {
-        // On successful login, redirect to the dashboard
-        console.log("Login successful! Redirecting to dashboard...");
-        router.push('/dashboard');
+        router.push("/dashboard");
       }
     } catch (err) {
-      // If the API function throws an error, display it
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unknown error occurred.");
-      }
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred."
+      );
     } finally {
-      // This runs whether the login was successful or not
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-subtle flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-md bg-background p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center mb-2 text-content">
-          Admin Login
-        </h1>
-        <p className="text-center text-gray-500 mb-8">
-          Access your Blood Bank Dashboard
-        </p>
+    <div className="flex flex-col min-h-screen font-sans bg-subtle dark:bg-gray-950">
+      <PublicHeader />
+      {/* UPDATED: Increased top padding (pt-32) for better spacing */}
+      <main className="flex-grow flex items-center justify-center p-4 pt-32 pb-12">
+        {/* UPDATED: Removed glass effect, using a solid dark background */}
+        <div className="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-2xl">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-content dark:text-gray-100">
+              Admin Login
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              Access your Blood Bank Dashboard
+            </p>
+          </div>
 
-        {error && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-r-lg" role="alert"><p>{error}</p></div>}
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">Email Address</label>
-            <input
-              type="email"
+          {error && (
+            <div className="bg-red-100 text-red-700 p-3 rounded-md text-center">
+              <p>{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <FormInput
               id="email"
+              name="email"
+              label="Email Address"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-subtle border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
+            <FormInput
               id="password"
+              name="password"
+              label="Password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-subtle border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-          </div>
+            <div className="text-sm text-right">
+              <a href="#" className="font-medium text-blue-500 hover:underline">
+                Forgot password?
+              </a>
+            </div>
+            <div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full px-8 py-3 font-bold text-blue-500 transition-all duration-300 rounded-md border-2 border-blue-500 bg-transparent hover:bg-blue-500/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:border-gray-500 disabled:text-gray-500 disabled:bg-transparent"
+              >
+                {isLoading ? "Signing in..." : "Sign In"}
+              </button>
+            </div>
+          </form>
 
-          <div className="text-sm text-right">
-            <a href="#" className="font-medium text-blue-600 hover:underline">
-              Forgot password?
-            </a>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          <p className="text-center text-sm text-gray-500">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-medium text-blue-500 hover:underline"
             >
-              {isLoading ? 'Logging in...' : 'Login'}
-            </button>
-          </div>
-        </form>
-
-        <p className="text-center text-sm text-gray-500 mt-8">
-          Dont have an account?{' '}
-          <Link href="/register" className="font-medium text-blue-600 hover:underline">
-            Register here
-          </Link>
-        </p>
-      </div>
+              Register here
+            </Link>
+          </p>
+        </div>
+      </main>
+      <PublicFooter />
     </div>
   );
 };
