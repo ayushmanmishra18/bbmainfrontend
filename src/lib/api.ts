@@ -90,3 +90,47 @@ export const addNewPatient = async (
   // In a real backend, the server would generate the ID and return the full patient object
   return { success: true, message: 'Patient registered successfully!' };
 };
+
+
+// Add these to src/lib/api.ts
+import { WholeBloodUnit, PrbcUnit } from '@/types'; // Add new types to the import
+
+// ...
+
+// --- Inventory Management API Functions ---
+
+export const getWholeBloodInventory = async (): Promise<{ success: true, data: WholeBloodUnit[] }> => {
+  console.log("Fetching Whole Blood inventory...");
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const dummyData: WholeBloodUnit[] = [
+    { id: 'WB001', donorCardId: 'DC5432', bloodUnitNo: 'BU9876', bloodGroup: 'O+', collectionDate: '2025-09-10', expiryDate: '2025-10-15', testStatus: 'Passed' },
+    { id: 'WB002', donorCardId: 'DC5433', bloodUnitNo: 'BU9877', bloodGroup: 'A-', collectionDate: '2025-09-12', expiryDate: '2025-10-17', testStatus: 'Pending' },
+  ];
+  return { success: true, data: dummyData };
+};
+
+export const getPrbcInventory = async (): Promise<{ success: true, data: PrbcUnit[] }> => {
+  console.log("Fetching PRBC inventory...");
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const dummyData: PrbcUnit[] = [
+    { id: 'PRBC001', donorCardId: 'DC5112', bloodUnitNo: 'BU9555', bloodGroup: 'B+', collectionDate: '2025-09-08', expiryDate: '2025-10-20', testStatus: 'Passed', source: 'Internal' },
+    { id: 'PRBC002', donorCardId: 'DC5113', bloodUnitNo: 'BU9556', bloodGroup: 'AB-', collectionDate: '2025-09-09', expiryDate: '2025-10-21', testStatus: 'Passed', source: 'External' },
+  ];
+  return { success: true, data: dummyData };
+};
+
+
+
+
+// Add this new function to your src/lib/api.ts file
+
+export const loginDonor = async (email: string, password: string) => {
+  console.log("Logging in Donor with:", { email, password });
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  
+  if (email === 'donor@example.com' && password === 'password123') {
+    return { success: true, user: { name: 'Ramesh Kumar' } };
+  } else {
+    throw new Error('Invalid email or password for donor.');
+  }
+};

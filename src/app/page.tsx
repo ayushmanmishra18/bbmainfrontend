@@ -13,8 +13,12 @@ export default function HomePage() {
         <Link href="/login" className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors text-center">
           Admin Login
         </Link>
+        {/* --- NEW BUTTON ADDED HERE --- */}
+        <Link href="/login/donor" className="px-6 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition-colors text-center">
+          Donor Login
+        </Link>
         <Link href="/register" className="px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-md hover:bg-gray-300 transition-colors text-center">
-          Register New Blood Bank
+          Register Blood Bank
         </Link>
       </div>
     </main>

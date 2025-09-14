@@ -48,3 +48,21 @@ export interface PatientDetails {
 }
  
 
+// Add these to src/types/index.ts
+
+export interface BloodUnitBase {
+  id: string; // Unique ID for the unit
+  donorCardId: string;
+  bloodUnitNo: string;
+  bloodGroup: string;
+  collectionDate: string;
+  expiryDate: string;
+  testStatus: 'Pending' | 'Passed' | 'Failed';
+}
+
+export type WholeBloodUnit = BloodUnitBase;
+
+export interface PrbcUnit extends BloodUnitBase {
+  source: 'Internal' | 'External'; // From donation or transfer
+}
+
