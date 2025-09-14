@@ -1,17 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-// Corrected import paths just in case
-import StatCard from '../../components/dashboard/StatCard';
-import InventoryChart from '../../components/dashboard/InventoryChart';
-import RecentActivity from '../../components/dashboard/RecentActivity';
+import StatCard from '@/components/dashboard/StatCard';
+import InventoryChart from '@/components/dashboard/InventoryChart';
+import RecentActivity from '@/components/dashboard/RecentActivity';
 import { Droplet, Users, HeartPulse, Hospital, UserPlus, PlusCircle } from 'lucide-react';
-import { getDashboardData } from '../../lib/api';
-import { DashboardData } from '../../types'; // Import our new type
+import { getDashboardData } from '@/lib/api';
+import { DashboardData } from '@/types';
 
 const DashboardPage = () => {
-  // --- THE FIX IS HERE ---
-  // We tell TypeScript that this state will be either DashboardData or null.
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -36,21 +33,22 @@ const DashboardPage = () => {
       }
     };
     fetchData();
-  }, []);
+  }, []); // Empty array ensures this runs only once when the page loads
 
   if (isLoading) {
+    // A professional loading skeleton UI
     return (
       <div className="space-y-8 animate-pulse">
-        <div className="h-10 bg-gray-200 rounded-md w-1/3"></div>
+        <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-md w-1/3"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="h-28 bg-gray-200 rounded-lg"></div>
-          <div className="h-28 bg-gray-200 rounded-lg"></div>
-          <div className="h-28 bg-gray-200 rounded-lg"></div>
-          <div className="h-28 bg-gray-200 rounded-lg"></div>
+          <div className="h-28 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-28 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-28 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="h-28 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 h-96 bg-gray-200 rounded-lg"></div>
-          <div className="lg:col-span-1 h-96 bg-gray-200 rounded-lg"></div>
+          <div className="lg:col-span-2 h-96 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+          <div className="lg:col-span-1 h-96 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
         </div>
       </div>
     );
@@ -63,7 +61,7 @@ const DashboardPage = () => {
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap justify-between items-center gap-4">
-        <h1 className="text-3xl font-bold text-content">
+        <h1 className="text-3xl font-bold text-content dark:text-gray-200">
           Dashboard
         </h1>
         <div className="flex space-x-2">

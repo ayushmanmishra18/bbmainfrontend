@@ -1,17 +1,12 @@
-// src/app/api/dashboard/route.ts
 import { NextResponse } from 'next/server';
 
-// This function handles GET requests to /api/dashboard
 export async function GET() {
-  // Simulate a database query delay
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const dummyData = {
     stats: {
-      totalUnits: '1,204',
-      totalDonors: '852',
-      pendingRequests: '12',
-      partnerBanks: '8',
+      totalUnits: '1,204', totalDonors: '852',
+      pendingRequests: '12', partnerBanks: '8',
     },
     inventoryByGroup: [
       { name: 'A+', units: 150 }, { name: 'A-', units: 45 },
