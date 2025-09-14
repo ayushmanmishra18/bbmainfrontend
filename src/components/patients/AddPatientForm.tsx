@@ -1,0 +1,105 @@
+"use client";
+
+import React, { useState } from 'react';
+import { PatientDetails } from '@/types';
+import { addNewPatient } from '@/lib/api';
+import FormInput from '@/components/ui/FormInput';
+
+type AddPatientFormProps = {
+  onClose: () => void;
+  onSuccess: () => void;
+};
+
+const AddPatientForm = ({ onClose, onSuccess }: AddPatientFormProps) => {
+  const [patientData, setPatientData] = useState({
+    name: '',
+    age: '',
+    sex: 'Male',
+    nationality: 'Indian',
+    address: '',
+    city: '',
+    stateUt: '',
+    bloodGroup: 'A+',
+    unitsRequired: '',
+    hospitalName: '',
+    doctorName: '',
+    disease: '',
+    contactPerson: '',
+    mobile: '',
+    email: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setPatientData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      await addNewPatient(patientData as PatientDetails);
+      onSuccess();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to register patient.');
+      console.error("Failed to add patient", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const labelClasses = "block text-sm font-medium text-content dark:text-gray-300";
+  
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {error && <div className="p-3 text-center text-red-700 bg-red-100 rounded-md">{error}</div>}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <FormInput id="name" name="name" label="Patient Full Name" value={patientData.name} onChange={handleChange} required className="md:col-span-2" />
+        <FormInput id="age" name="age" label="Age" type="number" value={patientData.age} onChange={handleChange} required />
+        <div>
+          <label htmlFor="sex" className={labelClasses}>Sex</label>
+          <select name="sex" id="sex" value={patientData.sex} onChange={handleChange} className="mt-1 w-full px-3 py-2 bg-subtle border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="bloodGroup" className={labelClasses}>Blood Group Required</label>
+          <select name="bloodGroup" id="bloodGroup" value={patientData.bloodGroup} onChange={handleChange} className="mt-1 w-full px-3 py-2 bg-subtle border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option>
+            <option>O+</option><option>O-</option>
+          </select>
+        </div>
+        <FormInput id="unitsRequired" name="unitsRequired" label="No. of Units Required" type="number" value={patientData.unitsRequired} onChange={handleChange} required />
+        <FormInput id="hospitalName" name="hospitalName" label="Name of Hospital" value={patientData.hospitalName} onChange={handleChange} required className="md:col-span-2" />
+        <FormInput id="city" name="city" label="City" value={patientData.city} onChange={handleChange} required />
+        <FormInput id="stateUt" name="stateUt" label="State/UT" value={patientData.stateUt} onChange={handleChange} required />
+        <FormInput id="doctorName" name="doctorName" label="Name of Doctor (Optional)" value={patientData.doctorName} onChange={handleChange} />
+        <FormInput id="disease" name="disease" label="Disease (Optional)" value={patientData.disease} onChange={handleChange} />
+        
+        <h3 className="text-lg font-semibold md:col-span-2 mt-4 -mb-2 dark:text-gray-200">Contact Person Details</h3>
+        <FormInput id="contactPerson" name="contactPerson" label="Contact Person Name" value={patientData.contactPerson} onChange={handleChange} required />
+        <FormInput id="mobile" name="mobile" label="Contact Mobile No." type="tel" value={patientData.mobile} onChange={handleChange} required />
+        <FormInput id="email" name="email" label="Contact Email (Optional)" type="email" value={patientData.email} onChange={handleChange} className="md:col-span-2" />
+      </div>
+
+      <div className="flex justify-end pt-4 space-x-3 border-t border-subtle dark:border-gray-700">
+        <button type="button" onClick={onClose} className="px-6 py-2 bg-subtle text-content font-bold rounded-md hover:bg-gray-200 dark:hover:bg-gray-600">
+          Cancel
+        </button>
+        <button type="submit" disabled={isSubmitting} className="px-6 py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 disabled:bg-gray-400">
+          {isSubmitting ? 'Saving...' : 'Save Patient'}
+        </button>
+      </div>
+    </form>
+  );
+};
+
+export default AddPatientForm;

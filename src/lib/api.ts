@@ -1,4 +1,4 @@
-import { BloodBankDetails, AdminDetails, DonorDetails } from '@/types';
+import { BloodBankDetails, AdminDetails, DonorDetails , PatientDetails} from '@/types';
 
 const API_BASE_URL = '/api'; 
 
@@ -57,4 +57,36 @@ export const getDonors = async () => {
   ];
 
   return { success: true, data: dummyDonors };
+};
+
+
+
+// Add these to src/lib/api.ts
+
+
+// ...
+
+// --- Patient Management API Functions ---
+// --- Patient Management API Functions ---
+
+export const getPatients = async () => {
+  console.log("Fetching patient list...");
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // FIX: The dummy data now includes all fields from the PatientDetails type
+  const dummyPatients: PatientDetails[] = [
+    { id: 'P001', name: 'Aarav Sharma', age: '35', sex: 'Male', bloodGroup: 'A+', unitsRequired: '2', hospitalName: 'City Hospital', city: 'Delhi', contactPerson: 'Rohan Sharma', mobile: '9876543211', nationality: 'Indian', address: '123 Main St', stateUt: 'Delhi', doctorName: 'Dr. Gupta', disease: 'Anemia', email: 'aarav@example.com' },
+    { id: 'P002', name: 'Priya Singh', age: '28', sex: 'Female', bloodGroup: 'B-', unitsRequired: '1', hospitalName: 'Apollo Hospital', city: 'Mumbai', contactPerson: 'Amit Singh', mobile: '9123456788', nationality: 'Indian', address: '456 Park Ave', stateUt: 'Maharashtra', doctorName: 'Dr. Iyer', disease: 'Thalassemia', email: 'priya@example.com' },
+  ];
+  return { success: true, data: dummyPatients };
+};
+
+export const addNewPatient = async (
+  // FIX: The function now accepts a PatientDetails object WITHOUT the 'id'
+  patientData: Omit<PatientDetails, 'id'>
+) => {
+  console.log("Adding new patient:", patientData);
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  // In a real backend, the server would generate the ID and return the full patient object
+  return { success: true, message: 'Patient registered successfully!' };
 };

@@ -22,3 +22,29 @@ export interface DonorDetails {
   email: string; weight: string; bloodGroup: string; address: string;
   stateUt: string; pincode: string;
 }
+
+// Add this to src/types/index.ts
+
+// src/types/index.ts
+
+export interface PatientDetails {
+  id: string; // Changed from id?: string
+  name: string;
+  age: string;
+  sex: string;
+  bloodGroup: string;
+  unitsRequired: string;
+  hospitalName: string;
+  city: string;
+  contactPerson: string;
+  mobile: string;
+  nationality: string;
+  address: string;
+  stateUt: string;
+  doctorName: string;
+  disease: string;
+  email: string;
+  // Add other fields from your form if they are not here
+}
+ 
+
