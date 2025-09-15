@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Card from '@/components/ui/Card';
-import { getTransferRequestDetails, respondToTransferRequest } from '@/lib/api';
+import StatusBadge from '@/components/ui/StatusBadge';
+import { getTransferRequestDetails, respondToTransferRequest, confirmTransferReceipt } from '@/lib/api';
 import { TransferRequestDetails } from '@/types';
-import { ArrowLeft, Check, X } from 'lucide-react';
+import { ArrowLeft, Check, X, Truck } from 'lucide-react';
 import Link from 'next/link';
 
 const TransferDetailsPage = () => {
@@ -16,27 +17,28 @@ const TransferDetailsPage = () => {
   const router = useRouter();
   const transferId = params.id as string;
 
-  useEffect(() => {
-    if (transferId) {
-      const loadDetails = async () => {
-        setIsLoading(true);
-        try {
-          const response = await getTransferRequestDetails(transferId);
-          setRequest(response.data);
-        } catch (error) {
-          console.error("Failed to load transfer details", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      loadDetails();
+  // --- THIS FUNCTION IS NOW CORRECTED ---
+  const loadDetails = useCallback(async () => {
+    if (!transferId) return;
+    setIsLoading(true);
+    try {
+      const response = await getTransferRequestDetails(transferId);
+      setRequest(response.data);
+    } catch (error) {
+      console.error("Failed to load transfer details", error);
+    } finally {
+      setIsLoading(false);
     }
   }, [transferId]);
 
-  const handleResponse = async (response: 'approve' | 'deny') => {
+  useEffect(() => {
+    loadDetails();
+  }, [loadDetails]);
+
+  const handleResponse = async (responseAction: 'approve' | 'deny') => {
     setIsResponding(true);
     try {
-      await respondToTransferRequest(transferId, response);
+      await respondToTransferRequest(transferId, responseAction);
       router.push('/dashboard/transfers');
     } catch (error) {
       console.error("Failed to respond to transfer request", error);
@@ -45,13 +47,28 @@ const TransferDetailsPage = () => {
     }
   };
 
+  const handleConfirmReceipt = async () => {
+    setIsResponding(true);
+    try {
+      await confirmTransferReceipt(transferId);
+      loadDetails(); // Re-fetch data to show updated status
+    } catch (error) {
+      console.error("Failed to confirm receipt", error);
+    } finally {
+      setIsResponding(false);
+    }
+  };
+
   if (isLoading) {
-    return <div className="p-6">Loading transfer details...</div>;
+    return <div className="p-6 text-center">Loading transfer details...</div>;
   }
 
   if (!request) {
-    return <div className="p-6">Transfer request not found.</div>;
+    return <div className="p-6 text-center">Transfer request not found.</div>;
   }
+
+  const isSupplier = request.type === 'Incoming';
+  const isReceiver = request.type === 'Outgoing';
 
   return (
     <div className="space-y-6">
@@ -62,10 +79,15 @@ const TransferDetailsPage = () => {
       
       <Card>
         <div className="p-6">
-          <h1 className="text-2xl font-semibold text-content dark:text-gray-200">
-            Transfer Request Details
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Request ID: {request.id}</p>
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-semibold text-content dark:text-gray-200">
+                Transfer Request Details
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Request ID: {request.id}</p>
+            </div>
+            <StatusBadge status={request.status} />
+          </div>
 
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-subtle dark:border-gray-700 pt-6">
             <div>
@@ -77,8 +99,6 @@ const TransferDetailsPage = () => {
             <div>
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Request Date:</p>
               <p className="text-content dark:text-gray-300">{request.date}</p>
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-2">Status:</p>
-              <p className="font-bold text-amber-500">{request.status}</p>
             </div>
           </div>
 
@@ -88,9 +108,9 @@ const TransferDetailsPage = () => {
               <table className="min-w-full divide-y divide-subtle dark:divide-gray-700">
                 <thead className="bg-subtle dark:bg-gray-700">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Blood Group</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Component</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Units</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium uppercase">Blood Group</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium uppercase">Component</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium uppercase">Units</th>
                   </tr>
                 </thead>
                 <tbody className="bg-background dark:bg-gray-800 divide-y divide-subtle dark:divide-gray-700">
@@ -106,28 +126,32 @@ const TransferDetailsPage = () => {
             </div>
           </div>
           
-          {request.status === 'Pending' && (
-            <div className="flex justify-end pt-6 mt-6 border-t border-subtle dark:border-gray-700 space-x-3">
-              <button 
-                type="button" 
-                onClick={() => handleResponse('deny')} 
-                disabled={isResponding}
-                className="flex justify-center items-center px-6 py-2 font-bold rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 disabled:bg-gray-400"
-              >
-                <X size={16} className="mr-2" />
-                {isResponding ? 'Loading...' : 'Deny Request'}
+          <div className="flex justify-end pt-6 mt-6 border-t border-subtle dark:border-gray-700 space-x-3">
+            {isSupplier && request.status === 'Pending' && (
+              <>
+                <button onClick={() => handleResponse('deny')} disabled={isResponding} className="flex items-center space-x-2 px-6 py-2 font-bold rounded-md bg-red-600 text-white hover:bg-red-700">
+                  <X size={16} /><span>{isResponding ? 'Loading...' : 'Deny'}</span>
+                </button>
+                <button onClick={() => handleResponse('approve')} disabled={isResponding} className="flex items-center space-x-2 px-6 py-2 font-bold rounded-md bg-blue-600 text-white hover:bg-blue-700">
+                  <Check size={16} /><span>{isResponding ? 'Loading...' : 'Approve'}</span>
+                </button>
+              </>
+            )}
+
+            {isSupplier && request.status === 'Approved' && (
+              <Link href={`/dashboard/transfers/${transferId}/issue`}>
+                <span className="flex items-center space-x-2 px-6 py-2 font-bold rounded-md bg-blue-600 text-white hover:bg-blue-700">
+                  <Truck size={16} /><span>Issue Blood (Form B)</span>
+                </span>
+              </Link>
+            )}
+
+            {isReceiver && request.status === 'Shipped' && (
+              <button onClick={handleConfirmReceipt} disabled={isResponding} className="flex items-center space-x-2 px-6 py-2 font-bold rounded-md bg-green-600 text-white hover:bg-green-700">
+                <Check size={16} /><span>{isResponding ? 'Loading...' : 'Confirm Receipt'}</span>
               </button>
-              <button 
-                type="button" 
-                onClick={() => handleResponse('approve')} 
-                disabled={isResponding}
-                className="flex justify-center items-center px-6 py-2 font-bold rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 disabled:bg-gray-400"
-              >
-                <Check size={16} className="mr-2" />
-                {isResponding ? 'Loading...' : 'Approve Request'}
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </Card>
     </div>

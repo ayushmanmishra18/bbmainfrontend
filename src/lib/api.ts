@@ -257,3 +257,11 @@ export const submitFormB = async (formData: FormBData) => {
   await new Promise(resolve => setTimeout(resolve, 1500));
   return { success: true, message: 'Form B submitted successfully. Blood units are now marked as shipped.' };
 };
+
+// Add this to src/lib/api.ts
+
+export const confirmTransferReceipt = async (transferId: string) => {
+  console.log(`Confirming receipt for Transfer ID: ${transferId}`);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return { success: true, message: 'Receipt confirmed. Transfer complete.' };
+};

@@ -1,11 +1,10 @@
 "use client";
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
 export type ColumnDefinition<T> = {
   key: keyof T;
   header: string;
-  render?: (row: T) => React.ReactNode; // Optional render function for custom cell content
+  render?: (row: T) => React.ReactNode;
 };
 
 type DataTableProps<T> = {
