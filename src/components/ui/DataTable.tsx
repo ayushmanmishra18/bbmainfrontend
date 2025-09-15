@@ -1,19 +1,20 @@
 "use client";
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
-// FIX: Added 'export' so other files can import this type
 export type ColumnDefinition<T> = {
   key: keyof T;
   header: string;
+  render?: (row: T) => React.ReactNode; // Optional render function for custom cell content
 };
 
 type DataTableProps<T> = {
   columns: ColumnDefinition<T>[];
   data: T[];
+  onRowClick?: (row: T) => void;
 };
 
-// FIX: Made the generic constraint more specific than 'any'
-const DataTable = <T extends { id: string | number }>({ columns, data }: DataTableProps<T>) => {
+const DataTable = <T extends { id: string | number }>({ columns, data, onRowClick }: DataTableProps<T>) => {
   if (!data || data.length === 0) {
     return (
       <div className="text-center py-10">
@@ -28,15 +29,27 @@ const DataTable = <T extends { id: string | number }>({ columns, data }: DataTab
         <thead className="bg-subtle dark:bg-gray-700">
           <tr>
             {columns.map((col) => (
-              <th key={String(col.key)} /* ... */ >{col.header}</th>
+              <th
+                key={String(col.key)}
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
+                {col.header}
+              </th>
             ))}
           </tr>
         </thead>
         <tbody className="divide-y divide-subtle dark:divide-gray-700">
           {data.map((row) => (
-            <tr key={row.id} /* ... */>
+            <tr 
+              key={row.id} 
+              onClick={() => onRowClick && onRowClick(row)}
+              className={`${onRowClick ? 'cursor-pointer hover:bg-subtle dark:hover:bg-gray-700' : ''} transition-colors`}
+            >
               {columns.map((col) => (
-                <td key={String(col.key)} /* ... */>{String(row[col.key])}</td>
+                <td key={String(col.key)} className="px-6 py-4 whitespace-nowrap text-sm text-content dark:text-gray-200">
+                  {col.render ? col.render(row) : String(row[col.key])}
+                </td>
               ))}
             </tr>
           ))}

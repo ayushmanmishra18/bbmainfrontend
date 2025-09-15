@@ -1,37 +1,53 @@
-// src/app/dashboard/transfers/page.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import DataTable, { ColumnDefinition } from '@/components/ui/DataTable';
+import StatusBadge from '@/components/ui/StatusBadge';
 import { getTransferHistory } from '@/lib/api';
 import { TransferLog } from '@/types';
 import { ArrowRightLeft } from 'lucide-react';
 import Link from 'next/link';
 
-const columns: ColumnDefinition<TransferLog>[] = [
-  { key: 'id', header: 'Transfer ID' },
-  { key: 'type', header: 'Type' },
-  { key: 'partnerBank', header: 'Partner Bank' },
-  { key: 'bloodGroup', header: 'Group' },
-  { key: 'units', header: 'Units' },
-  { key: 'status', header: 'Status' },
-  { key: 'date', header: 'Date' },
-];
-
 const TransfersPage = () => {
   const [history, setHistory] = useState<TransferLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const loadHistory = async () => {
       setIsLoading(true);
-      const response = await getTransferHistory();
-      setHistory(response.data);
-      setIsLoading(false);
+      try {
+        const response = await getTransferHistory();
+        setHistory(response.data);
+      } catch (error) {
+        console.error("Failed to load transfer history", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     loadHistory();
   }, []);
+  
+  // Define columns for the data table
+  const columns: ColumnDefinition<TransferLog>[] = [
+    { key: 'id', header: 'Transfer ID' },
+    { key: 'type', header: 'Type' },
+    { key: 'partnerBank', header: 'Partner Bank' },
+    { key: 'units', header: 'Units' },
+    { 
+      key: 'status', 
+      header: 'Status',
+      render: (row) => <StatusBadge status={row.status} />
+    },
+    { key: 'date', header: 'Date' },
+  ];
+
+  // Function to handle clicking on a table row
+  const handleRowClick = (row: TransferLog) => {
+    router.push(`/dashboard/transfers/${row.id}`);
+  };
 
   return (
     <div className="space-y-8">
@@ -48,11 +64,11 @@ const TransfersPage = () => {
       </div>
 
       <Card>
-        <h2 className="text-xl font-semibold mb-4">Transfer History</h2>
+        <h2 className="text-xl font-semibold mb-4 text-content dark:text-gray-200">Transfer History</h2>
         {isLoading ? (
-          <p>Loading transfer history...</p>
+          <p className="text-center py-10">Loading transfer history...</p>
         ) : (
-          <DataTable columns={columns} data={history} />
+          <DataTable columns={columns} data={history} onRowClick={handleRowClick} />
         )}
       </Card>
     </div>

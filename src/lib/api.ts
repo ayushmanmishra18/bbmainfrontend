@@ -1,17 +1,12 @@
-import { 
-  BloodBankDetails, AdminDetails, DonorDetails, PatientDetails, 
-  DonorCard, WholeBloodUnit, PrbcUnit, BloodBankSearchResult, 
-  PartnershipRequest, PartnerBank, TransferLog, FormARequestData 
+import {
+  BloodBankDetails, AdminDetails, DonorDetails, PatientDetails,
+  DonorCard, WholeBloodUnit, PrbcUnit, BloodBankSearchResult,
+  PartnershipRequest, PartnerBank, TransferLog, FormARequestData,
+  TransferRequestDetails
 } from '@/types';
 
-// This points all API calls to our internal Next.js API routes
-const API_BASE_URL = '/api'; 
+const API_BASE_URL = '/api';
 
-/**
- * A helper function to handle API responses consistently.
- * It checks for errors and parses the JSON.
- * @param response The raw response from the fetch call.
- */
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred.' }));
@@ -21,7 +16,7 @@ const handleResponse = async (response: Response) => {
 };
 
 // =================================================================================
-//  AUTHENTICATION FUNCTIONS (For Registration & Login)
+//  AUTHENTICATION FUNCTIONS
 // =================================================================================
 
 export const registerNewBloodBank = async (bankDetails: BloodBankDetails, adminDetails: AdminDetails) => {
@@ -64,7 +59,7 @@ export const getDashboardData = async () => {
 // =================================================================================
 
 export const getDonors = async () => {
-  console.log("Fetching donor list from backend...");
+  console.log("Fetching donor list...");
   await new Promise(resolve => setTimeout(resolve, 1000));
   const dummyDonors = [
     { id: 'D001', name: 'Ramesh Kumar', bloodGroup: 'O+', mobile: '9876543210', city: 'Delhi' },
@@ -104,7 +99,6 @@ export const addNewPatient = async (patientData: Omit<PatientDetails, 'id'>) => 
 // =================================================================================
 
 export const getWholeBloodInventory = async (): Promise<{ success: true, data: WholeBloodUnit[] }> => {
-  console.log("Fetching Whole Blood inventory...");
   await new Promise(resolve => setTimeout(resolve, 500));
   const dummyData: WholeBloodUnit[] = [
     { id: 'WB001', donorCardId: 'DC5432', bloodUnitNo: 'BU9876', bloodGroup: 'O+', collectionDate: '2025-09-10', expiryDate: '2025-10-15', testStatus: 'Passed' },
@@ -114,7 +108,6 @@ export const getWholeBloodInventory = async (): Promise<{ success: true, data: W
 };
 
 export const getPrbcInventory = async (): Promise<{ success: true, data: PrbcUnit[] }> => {
-  console.log("Fetching PRBC inventory...");
   await new Promise(resolve => setTimeout(resolve, 500));
   const dummyData: PrbcUnit[] = [
     { id: 'PRBC001', donorCardId: 'DC5112', bloodUnitNo: 'BU9555', bloodGroup: 'B+', collectionDate: '2025-09-08', expiryDate: '2025-10-20', testStatus: 'Passed', source: 'Internal' },
@@ -124,11 +117,10 @@ export const getPrbcInventory = async (): Promise<{ success: true, data: PrbcUni
 };
 
 // =================================================================================
-//  DONOR PORTAL FUNCTIONS (For logged-in Donors)
+//  DONOR PORTAL FUNCTIONS
 // =================================================================================
 
 export const getMyDonorCards = async (): Promise<{ success: true, data: DonorCard[] }> => {
-  console.log("Fetching donor cards for the logged-in user...");
   await new Promise(resolve => setTimeout(resolve, 1000));
   const dummyCards: DonorCard[] = [
     { id: 'DC5432', bloodUnitNo: 'BU9876', donationDate: '2025-08-15', donatedAt: 'AIIMS, Delhi', status: 'Available' },
@@ -138,11 +130,9 @@ export const getMyDonorCards = async (): Promise<{ success: true, data: DonorCar
 };
 
 export const getPublicPatientList = async (): Promise<{ success: true, data: PatientDetails[] }> => {
-  console.log("Fetching public patient list...");
   await new Promise(resolve => setTimeout(resolve, 1000));
   const dummyPatients: PatientDetails[] = [
     { id: 'P001', name: 'Aarav Sharma', bloodGroup: 'A+', unitsRequired: '2', hospitalName: 'City Hospital', city: 'Delhi', stateUt: 'Delhi', contactPerson: '', mobile: '', age: '', sex: '', nationality: '', address: '', doctorName: '', disease: '', email: '' },
-    { id: 'P002', name: 'Priya Singh', bloodGroup: 'B-', unitsRequired: '1', hospitalName: 'Apollo Hospital', city: 'Mumbai', stateUt: 'Maharashtra', contactPerson: '', mobile: '', age: '', sex: '', nationality: '', address: '', doctorName: '', disease: '', email: '' },
   ];
   return { success: true, data: dummyPatients };
 };
@@ -154,16 +144,14 @@ export const submitDonorCardTransfer = async (patientId: string, cardId: string)
 };
 
 // =================================================================================
-//  INTER-BANK NETWORK & TRANSFER FUNCTIONS (Admin-side)
+//  INTER-BANK NETWORK & TRANSFERS FUNCTIONS
 // =================================================================================
 
 export const searchBloodBanks = async (query: string): Promise<{ success: true, data: BloodBankSearchResult[] }> => {
-  console.log(`Searching for blood banks with query: "${query}"`);
   await new Promise(resolve => setTimeout(resolve, 1000));
   const allBanks: BloodBankSearchResult[] = [
     { id: 'BB101', name: 'City Hospital Blood Bank', city: 'Delhi', state: 'Delhi', isPartner: true },
     { id: 'BB102', name: 'Apollo Blood Services', city: 'Mumbai', state: 'Maharashtra', isPartner: false },
-    { id: 'BB103', name: 'Fortis Blood Center', city: 'Bangalore', state: 'Karnataka', isPartner: false },
   ];
   const filteredBanks = query ? allBanks.filter(b => b.name.toLowerCase().includes(query.toLowerCase())) : allBanks;
   return { success: true, data: filteredBanks };
@@ -177,34 +165,29 @@ export const sendPartnershipRequest = async (targetBankId: string) => {
 
 export const getSentRequests = async (): Promise<{ success: true, data: PartnershipRequest[] }> => {
     await new Promise(resolve => setTimeout(resolve, 500));
-    const data: PartnershipRequest[] = [
-        { id: 'REQ001', bloodBankName: 'Apollo Blood Services', city: 'Mumbai', state: 'Maharashtra', date: '2025-09-14' },
-    ];
+    const data: PartnershipRequest[] = [{ id: 'REQ001', bloodBankName: 'Apollo Blood Services', city: 'Mumbai', state: 'Maharashtra', date: '2025-09-14' }];
     return { success: true, data };
 };
 
 export const getReceivedRequests = async (): Promise<{ success: true, data: PartnershipRequest[] }> => {
     await new Promise(resolve => setTimeout(resolve, 500));
-    const data: PartnershipRequest[] = [
-        { id: 'REQ002', bloodBankName: 'Red Cross Delhi', city: 'Delhi', state: 'Delhi', date: '2025-09-13' },
-    ];
+    const data: PartnershipRequest[] = [{ id: 'REQ002', bloodBankName: 'Red Cross Delhi', city: 'Delhi', state: 'Delhi', date: '2025-09-13' }];
     return { success: true, data };
 };
 
 export const approveRequest = async (requestId: string) => {
-    console.log(`Approving request ID: ${requestId}`);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return { success: true, message: 'Request approved successfully.' };
+  console.log(`Approving request ID: ${requestId}`);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return { success: true, message: 'Request approved successfully.' };
 };
 
 export const denyRequest = async (requestId: string) => {
-    console.log(`Denying request ID: ${requestId}`);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return { success: true, message: 'Request denied.' };
+  console.log(`Denying request ID: ${requestId}`);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return { success: true, message: 'Request denied.' };
 };
 
 export const getPartnerBanks = async (): Promise<{ success: true, data: PartnerBank[] }> => {
-  console.log("Fetching partner banks...");
   await new Promise(resolve => setTimeout(resolve, 500));
   const dummyPartners: PartnerBank[] = [
     { id: 'BB102', name: 'Apollo Blood Services', city: 'Mumbai' },
@@ -214,7 +197,6 @@ export const getPartnerBanks = async (): Promise<{ success: true, data: PartnerB
 };
 
 export const getTransferHistory = async (): Promise<{ success: true, data: TransferLog[] }> => {
-  console.log("Fetching transfer history...");
   await new Promise(resolve => setTimeout(resolve, 1000));
   const dummyHistory: TransferLog[] = [
     { id: 'TRN001', type: 'Outgoing', partnerBank: 'Apollo Blood Services', bloodGroup: 'A+', units: 5, status: 'Received', date: '2025-09-10' },
@@ -229,3 +211,49 @@ export const submitFormARequest = async (requestData: FormARequestData) => {
   return { success: true, message: 'Transfer request (Form A) sent successfully!' };
 };
 
+export const getTransferRequestDetails = async (transferId: string): Promise<{ success: true, data: TransferRequestDetails }> => {
+  console.log(`Fetching details for Transfer ID: ${transferId}`);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  const dummyDetails: TransferRequestDetails = {
+    id: transferId, type: 'Incoming', partnerBank: 'National Blood Centre', bloodGroup: 'Multiple',
+    units: 13, status: 'Pending', date: '2025-09-15',
+    fromBank: { name: 'National Blood Centre', address: '1 Red Cross Road, New Delhi', licenseNo: 'DL-12345', contact: '011-23456789' },
+    items: [
+      { id: 1, bloodGroup: 'O-', component: 'PRBC', units: 10 },
+      { id: 2, bloodGroup: 'B-', component: 'PRBC', units: 3 },
+    ]
+  };
+  return { success: true, data: dummyDetails };
+};
+
+export const respondToTransferRequest = async (transferId: string, response: 'approve' | 'deny') => {
+  console.log(`Responding to Transfer ID: ${transferId} with action: ${response}`);
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  return { success: true, message: `Request has been successfully ${response === 'approve' ? 'approved' : 'denied'}.` };
+};
+
+// Add these to src/lib/api.ts
+import { FormBIssueItem, FormBData } from '@/types'; // Add new types to the import
+
+// ...
+
+// --- NEW FUNCTIONS FOR FORM B ---
+
+export const getApprovedTransferDetailsForIssue = async (transferId: string): Promise<{ success: true, data: { itemsToIssue: FormBIssueItem[] } }> => {
+  console.log(`Fetching approved items for Transfer ID: ${transferId} to prepare Form B`);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // The backend would look up its inventory to find available units matching the request
+  const dummyItems: FormBIssueItem[] = [
+    { id: 'PRBC005', donorCardId: 'DC5120', bloodUnitNo: 'BU9560', bloodGroup: 'O-', component: 'PRBC', collectionDate: '2025-09-01', expiryDate: '2025-10-12', testStatus: 'Passed' },
+    { id: 'PRBC006', donorCardId: 'DC5121', bloodUnitNo: 'BU9561', bloodGroup: 'O-', component: 'PRBC', collectionDate: '2025-09-02', expiryDate: '2025-10-13', testStatus: 'Passed' },
+    { id: 'PRBC007', donorCardId: 'DC5122', bloodUnitNo: 'BU9562', bloodGroup: 'B-', component: 'PRBC', collectionDate: '2025-09-03', expiryDate: '2025-10-14', testStatus: 'Passed' },
+  ];
+  return { success: true, data: { itemsToIssue: dummyItems } };
+};
+
+export const submitFormB = async (formData: FormBData) => {
+  console.log("Submitting Form B:", formData);
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  return { success: true, message: 'Form B submitted successfully. Blood units are now marked as shipped.' };
+};

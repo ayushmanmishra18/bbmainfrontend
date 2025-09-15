@@ -128,3 +128,34 @@ export interface FormARequestData {
   items: FormARequestItem[];
 }
 
+// For the detailed view of a single transfer request (Module 16)
+export interface TransferRequestDetails extends TransferLog {
+  fromBank: {
+    name: string;
+    address: string;
+    licenseNo: string;
+    contact: string;
+  };
+  items: FormARequestItem[];
+}
+
+// Add these to src/types/index.ts
+
+// Represents a single blood unit being issued in Form B
+export interface FormBIssueItem {
+  id: string; // Could be the BloodUnitBase id
+  donorCardId: string;
+  bloodUnitNo: string;
+  bloodGroup: string;
+  component: 'Whole Blood' | 'PRBC';
+  collectionDate: string;
+  expiryDate: string;
+  testStatus: 'Passed'; // Should always be 'Passed' for issue
+}
+
+// Represents the complete data for a Form B submission
+export interface FormBData {
+  transferId: string;
+  issuedItems: FormBIssueItem[];
+  transportDetails: string;
+}
