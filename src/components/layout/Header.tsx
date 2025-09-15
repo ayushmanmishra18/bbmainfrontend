@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, LogOut, Settings } from 'lucide-react'; // Icons for the dropdown
+import {  LogOut, Settings } from 'lucide-react'; // Added theme icons
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -18,31 +18,40 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-background border-b border-subtle p-4 sticky top-0 z-10">
-      <div className="flex justify-between items-center">
-        {/* We can add a logo or search bar here later */}
-        <div></div>
-
+    <header className="bg-background dark:bg-gray-800 border-b border-subtle dark:border-gray-700 p-4 sticky top-0 z-10">
+      <div className="flex justify-end items-center">
+        {/* We can add a global search or other actions on the left later */}
+        
         <div className="relative">
           <button 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center space-x-2 p-2 rounded-md hover:bg-subtle"
+            className="flex items-center space-x-2 p-2 rounded-full hover:bg-subtle dark:hover:bg-gray-700 transition-colors"
           >
-            <User className="w-5 h-5 text-content" />
-            <span className="font-semibold text-content hidden sm:block">{user.name}</span>
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+              {user.name.charAt(0)}
+            </div>
+            <span className="font-semibold text-content dark:text-gray-200 hidden sm:block">{user.name}</span>
           </button>
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-background rounded-md shadow-lg border border-subtle">
+            <div 
+              className="absolute right-0 mt-2 w-56 bg-background dark:bg-gray-800 rounded-md shadow-lg border border-subtle dark:border-gray-700"
+              onClick={() => setIsDropdownOpen(false)} // Close dropdown on click inside
+            >
               <div className="p-2">
-                <a href="#" className="flex items-center space-x-2 px-3 py-2 text-sm text-content rounded-md hover:bg-subtle">
+                <div className="px-3 py-2">
+                  <p className="text-sm font-semibold text-content dark:text-gray-200">{user.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Administrator</p>
+                </div>
+                <div className="my-1 border-t border-subtle dark:border-gray-700"></div>
+                <a href="#" className="flex items-center space-x-2 px-3 py-2 text-sm text-content dark:text-gray-300 rounded-md hover:bg-subtle dark:hover:bg-gray-700">
                   <Settings className="w-4 h-4" />
-                  <span>Settings</span>
+                  <span>Account Settings</span>
                 </a>
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-danger rounded-md hover:bg-subtle"
+                  className="w-full text-left flex items-center space-x-2 px-3 py-2 text-sm text-red-500 rounded-md hover:bg-subtle dark:hover:bg-gray-700"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Logout</span>

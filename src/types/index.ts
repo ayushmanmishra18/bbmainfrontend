@@ -76,3 +76,22 @@ export interface DonorCard {
   status: 'Available' | 'Used' | 'Expired';
   usedForPatientId?: string;
 }
+
+// ... existing interfaces
+
+// ... all existing interfaces
+
+// ... existing interfaces
+
+// ... existing interfaces
+
+export interface BloodBankSearchResult {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  isPartner: boolean; // Is this bank already in our group?
+  requestSent?: boolean; // Optional flag to track if a request has been sent
+}
+
+
