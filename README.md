@@ -203,3 +203,9 @@ System updates:
   - Bank B Balance Sheet → Asset
       ↓
 Bank B releases physical blood to the Patient
+
+
+
+
+
+
