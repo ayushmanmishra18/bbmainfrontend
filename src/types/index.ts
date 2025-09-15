@@ -66,3 +66,13 @@ export interface PrbcUnit extends BloodUnitBase {
   source: 'Internal' | 'External'; // From donation or transfer
 }
 
+// donor card type
+
+export interface DonorCard {
+  id: string;
+  bloodUnitNo: string;
+  donationDate: string;
+  donatedAt: string; // Name of the Blood Bank
+  status: 'Available' | 'Used' | 'Expired';
+  usedForPatientId?: string;
+}

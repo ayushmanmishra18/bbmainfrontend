@@ -134,3 +134,62 @@ export const loginDonor = async (email: string, password: string) => {
     throw new Error('Invalid email or password for donor.');
   }
 };
+
+
+// Add DonorCard to the import at the top
+import {  DonorCard } from '@/types';
+
+// --- Donor Portal API Functions ---
+
+export const getMyDonorCards = async (): Promise<{ success: true, data: DonorCard[] }> => {
+  console.log("Fetching donor cards for the logged-in user...");
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  const dummyCards: DonorCard[] = [
+    { id: 'DC5432', bloodUnitNo: 'BU9876', donationDate: '2025-08-15', donatedAt: 'AIIMS, Delhi', status: 'Available' },
+    { id: 'DC5112', bloodUnitNo: 'BU9555', donationDate: '2025-06-01', donatedAt: 'City Hospital, Mumbai', status: 'Used', usedForPatientId: 'P001' },
+    { id: 'DC4321', bloodUnitNo: 'BU8765', donationDate: '2025-02-20', donatedAt: 'AIIMS, Delhi', status: 'Expired' },
+    { id: 'DC6789', bloodUnitNo: 'BU1234', donationDate: '2025-09-05', donatedAt: 'Max Hospital, Gurgaon', status: 'Available' },
+  ];
+
+  return { success: true, data: dummyCards };
+};
+
+
+// ... existing imports
+// Add PatientDetails to the import
+
+// ... other API functions (loginAdmin, getMyDonorCards, etc.)
+
+// --- New Function for Public Patient List ---
+
+export const getPublicPatientList = async (): Promise<{ success: true, data: PatientDetails[] }> => {
+  console.log("Fetching public patient list...");
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // This data is a simplified version of PatientDetails for public view
+  const dummyPatients: PatientDetails[] = [
+    { id: 'P001', name: 'Aarav Sharma', bloodGroup: 'A+', unitsRequired: '2', hospitalName: 'City Hospital', city: 'Delhi', stateUt: 'Delhi', contactPerson: '', mobile: '', age: '', sex: '', nationality: '', address: '', doctorName: '', disease: '', email: '' },
+    { id: 'P002', name: 'Priya Singh', bloodGroup: 'B-', unitsRequired: '1', hospitalName: 'Apollo Hospital', city: 'Mumbai', stateUt: 'Maharashtra', contactPerson: '', mobile: '', age: '', sex: '', nationality: '', address: '', doctorName: '', disease: '', email: '' },
+    { id: 'P003', name: 'Rohan Gupta', bloodGroup: 'O+', unitsRequired: '3', hospitalName: 'Fortis Hospital', city: 'Bangalore', stateUt: 'Karnataka', contactPerson: '', mobile: '', age: '', sex: '', nationality: '', address: '', doctorName: '', disease: '', email: '' },
+  ];
+
+  return { success: true, data: dummyPatients };
+};
+
+// ... existing imports
+
+
+// ... all other existing API functions
+
+// --- New Function to Submit Donation ---
+
+export const submitDonorCardTransfer = async (patientId: string, cardId: string) => {
+  console.log(`Submitting transfer of Donor Card [${cardId}] to Patient [${patientId}]`);
+  await new Promise(resolve => setTimeout(resolve, 1500));
+
+  // Simulate a successful response
+  return { success: true, message: 'Donation successful! The blood bank has been notified.' };
+};
+
+
