@@ -1,10 +1,9 @@
-// src/app/login/donor/page.tsx
 "use client";
 
 import React, { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { loginDonor } from '@/lib/api'; // We will create this function next
+import { loginDonor } from '@/lib/api';
 import Card from '@/components/ui/Card';
 import FormInput from '@/components/ui/FormInput';
 
@@ -19,11 +18,10 @@ const DonorLoginPage = () => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
     try {
       const response = await loginDonor(email, password);
       if (response.success) {
-        router.push('/donor'); // Redirect to donor dashboard
+        router.push('/donor');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unknown error occurred.");
@@ -41,29 +39,22 @@ const DonorLoginPage = () => {
         <p className="text-center text-gray-500 dark:text-gray-400 mb-8">
           Access your Donor Portal
         </p>
-
         {error && <div className="bg-red-100 text-red-700 p-3 mb-6 rounded-md text-center"><p>{error}</p></div>}
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <FormInput id="email" name="email" label="Email Address" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <FormInput id="password" name="password" label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-
           <div className="text-sm text-right">
             <a href="#" className="font-medium text-blue-600 hover:underline">Forgot password?</a>
           </div>
-
           <div>
-            <button type="submit" disabled={isLoading} className="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-md hover:bg-green-700 disabled:bg-gray-400 transition-colors">
+            <button type="submit" disabled={isLoading} className="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 disabled:bg-gray-400 transition-colors">
               {isLoading ? 'Logging in...' : 'Login'}
             </button>
           </div>
         </form>
-
-         <p className="text-center text-sm text-gray-500 mt-8">
+        <p className="text-center text-sm text-gray-500 mt-8">
           Back to{' '}
-          <Link href="/" className="font-medium text-blue-600 hover:underline">
-            Main Page
-          </Link>
+          <Link href="/" className="font-medium text-blue-600 hover:underline">Main Page</Link>
         </p>
       </Card>
     </div>

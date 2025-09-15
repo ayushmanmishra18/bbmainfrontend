@@ -49,7 +49,7 @@ const InventoryPage = () => {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-content dark:text-gray-200">Inventory Management</h1>
-        <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700">
+      <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors shadow-sm">
           <PlusCircle className="w-4 h-4" />
           <span>New Donation</span>
         </button>

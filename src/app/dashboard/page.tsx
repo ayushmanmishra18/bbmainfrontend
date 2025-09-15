@@ -58,7 +58,7 @@ const DashboardPage = () => {
     return <div className="p-6 rounded-lg bg-red-100 text-red-700"><strong>Error:</strong> {error}</div>;
   }
   
-  return (
+ return (
     <div className="space-y-8">
       <div className="flex flex-wrap justify-between items-center gap-4">
         <h1 className="text-3xl font-bold text-content dark:text-gray-200">
@@ -69,7 +69,7 @@ const DashboardPage = () => {
              <UserPlus className="w-4 h-4" />
              <span>Add Donor</span>
            </button>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition-colors shadow-sm">
+            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors shadow-sm">
              <PlusCircle className="w-4 h-4" />
              <span>New Donation</span>
            </button>

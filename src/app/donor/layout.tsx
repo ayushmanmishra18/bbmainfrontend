@@ -1,7 +1,7 @@
 // src/app/donor/layout.tsx
 import React from 'react';
 import Link from 'next/link';
-import { User, LogOut } from 'lucide-react';
+import {  LogOut } from 'lucide-react';
 
 // A simple header for the Donor's section
 const DonorHeader = () => (
