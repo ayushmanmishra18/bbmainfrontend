@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Droplet } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 const PublicHeader = () => {
   return (
@@ -26,6 +27,7 @@ const PublicHeader = () => {
           <Link href="/login/donor" className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors">
             Donor Login
           </Link>
+          <ThemeToggle />
         </nav>
       </div>
     </header>
