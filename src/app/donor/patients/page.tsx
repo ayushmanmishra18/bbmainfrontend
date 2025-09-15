@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/Card';
 import { getPublicPatientList } from '@/lib/api';
 import { PatientDetails } from '@/types';
-import { BedDouble, Droplet, Hospital, MapPin } from 'lucide-react';
+import { Droplet, Hospital, MapPin } from 'lucide-react';
 
 const PatientsInNeedPage = () => {
   const [patients, setPatients] = useState<PatientDetails[]>([]);
